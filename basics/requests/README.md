@@ -79,26 +79,85 @@ You have the following methods available to you:
 
 Name                     | Arguments                  | Returns  | Description
 :------------------------|:---------------------------|:---------|:-----------
-`add()`                  | `?array $data`             | `array`  | Add items
-`has()`                  | `string $name`             | `bool`   | Request has input
-`hasFile()`              | `string $name`             | `bool`   | Request has file
-`hasCookie()`            | `string $name`             | `bool`   | Request has cookie
-`hasHeader()`            | `string $name`             | `bool`   | Request has header
-`input()`                | `string $name`             | `string` | Get request input
-`file()`                 | `string $name`             | `string` | Get request file
-`cookie()`               | `string $name`             | `string` | Get request cookie
-`header()`               | `string $name`             | `string` | Get request header
-`data()`                 | `null`                     | `array`  | Get request data
-`all()`                  | `null`                     | `array`  | Get request data
-`files()`                | `null`                     | `array`  | Get request files
-`cookies()`              | `null`                     | `array`  | Get request cookies
-`headers()`              | `null`                     | `array`  | Get request headers
-`method()`               | `null`                     | `string` | Get request method
-`isAjax()`               | `null`                     | `bool`   | Request is xmlhttp
-`path()`                 | `null`                     | `string` | Get request path
-`url()`                  | `null`                     | `string` | Get request url
-`route()`                | `null`                     | `object` | Get matched route
-`is()`                   | `string $url`              | `bool`   | Request url is $url
-`isDownForMaintenance()` | `null`                     | `bool`   | Application is under maintenance or not
-`ip()`                   | `null`                     | `string` | Get request IP Address
-`validate()`             | `?Closure $closure`        | `mixed`  | Validate request
+`add`                    | `?array $data`             | `array`  | Add items
+`has`                    | `string $name`             | `bool`   | Request has input
+`input`                  | `string $name`             | `string` | Get request input
+`file`                   | `string $name`             | `string` | Get request file
+`data`                   | `null`                     | `array`  | Get request data
+`all`                    | `null`                     | `array`  | Get request data
+`file`                   | `string $name`             | `array`  | Get specified file
+`files`                  | `null`                     | `array`  | Get request files
+`cookie`                 | `string $name`             | `string` | Get request cookie
+`cookies`                | `null`                     | `array`  | Get request cookies
+`header`                 | `string $name`             | `string` | Get request header
+`headers`                | `null`                     | `array`  | Get request headers
+`method`                 | `null`                     | `string` | Get request method
+`only`                   | `array $fields`            | `array`  | Get specified fields
+`isAjax`                 | `null`                     | `bool`   | Request is xmlhttp
+`path`                   | `null`                     | `string` | Get request path
+`url`                    | `null`                     | `string` | Get request url
+`route`                  | `null`                     | `object` | Get matched route
+`server`                 | `string $name`             | `string` | Get request server
+`is`                     | `string $url`              | `bool`   | Request url is $url
+`isDownForMaintenance`   | `null`                     | `bool`   | Application is under maintenance or not
+`ip`                     | `null`                     | `string` | Get request IP Address
+`validate`               | `?Closure $closure`        | `mixed`  | Validate request
+
+## Creating a Request
+
+Modulus' `craftsman` provides a simple command to generate a `request`.
+
+```
+php craftsman craft:request CreateProfile
+```
+
+You can have rules in your `request`:
+
+```php
+/**
+ * Request rules
+ *
+ * @return array
+ */
+public function rules() : array
+{
+  return [
+    'title' => 'required|min:10',
+    'body' => 'required|max:255',
+  ];
+}
+```
+
+A custom `request` class that has rules, will automatically run the `validate` method.
+
+## HTTP
+
+### Header
+
+Here is an example of how you can access Header methods from the Request class:
+
+```php
+$request->header->all();
+```
+
+Method    | Arguments                     | Returns   | Description
+:---------|:------------------------------|:----------|:-----------
+`add`     | `string $name, string $name`  | `Headers` | Add header
+`addMany` | `array $headers`              | `Headers` | Add headers
+`has`     | `string $name`                | `bool`    | Check if header is present
+`get`     | `string $server`              | `mixed`   | Get header
+`all`     | `null`                        | `array`   | Get all headers
+
+### Server
+
+Here is an example of how you can access Server methods from the Request class:
+
+```php
+$request->server->all();
+```
+
+Method | Arguments           | Returns | Description
+:------|:--------------------|:--------|:-----------
+`has`  | `string $name`      | `bool`  | Check if server property is present
+`get`  | `string $server`    | `mixed` | Get property
+`all`  | `null`              | `array` | Get all propeties
